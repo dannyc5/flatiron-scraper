@@ -33,6 +33,8 @@ def crawl_page(student_page)
   # Try the following line, subbing out the "[-3]" for other elements of the array
   # to get different information
   cities =  url.css('h3')[-3].parent.parent.children[5].children.map { |city| city.text.strip  }.reject(&:empty?)
+  # get biographies
+  biography = url.css('h3')[1].parent.parent.children[5].text.strip
 
   #get favorite cities
   services_div_contents = url.css('.services')
@@ -65,7 +67,7 @@ def crawl_page(student_page)
 
 
   #RETURN VALUE, FOR TESTING PURPOSES
-  [name,image,quote,cities,social_media_array].inspect
+  [name,image,quote,cities,social_media_array, biography].inspect
 
 end
 #binding.pry
