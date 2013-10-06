@@ -8,7 +8,12 @@ students_list = main_page.css('.home-blog ul')
 student_list_item = students_list.css('.blog-thumb a')
 links_to_crawl = student_list_item.map { |i| i.attributes["href"].value  }
 urlmap = links_to_crawl.map { |link| "http://students.flatironschool.com/" + link  }
-
+urlmap.delete_at(28)
+urlmap.delete_at(5)
+urlmap.delete_at(4)
+# urlmap[5] = "http://students.flatironschool.com/students/stephanie_oh.html"
+# urlmap[28]
+# urlmap[4]
 
 #Methods to make:
 #1. Student Image returns a string like 
@@ -32,7 +37,7 @@ def crawl_page(student_page)
 
   # Try the following line, subbing out the "[-3]" for other elements of the array
   # to get different information
-  cities =  url.css('h3')[-3].parent.parent.children[5].children.map { |city| city.text.strip  }.reject(&:empty?) || "cities"
+  cities =  url.css('h3')[-3].parent.parent.children[5].children.map { |city| city.text.strip || "cities" }.reject(&:empty?) 
   # get biographies
   biography = url.css('h3')[1].parent.parent.children[5].text.strip || "bio"
   personal_projects = url.css('h3')[-4].parent.parent.children[5].text.strip || "projects"
@@ -61,14 +66,21 @@ end
 #binding.pry
 
 final_text = ""
+#puts urlmap.inspect
 #For Testing purposes, run this function on Vivian and see what comes back
-puts crawl_page(urlmap[0]).inspect
-puts crawl_page(urlmap[2]).inspect
-puts crawl_page(urlmap[3]).inspect
-puts crawl_page(urlmap[5]).inspect
+# puts crawl_page(urlmap[0]).inspect
+# puts crawl_page(urlmap[2]).inspect
+# puts crawl_page(urlmap[3]).inspect
+# puts crawl_page(urlmap[5]).inspect
 
-# test = urlmap.map do |site|
-#   crawl_page(site)
-# end
+test = urlmap.map do |site|
+  var = crawl_page(site)
+#   final_text += var
+end
 
-# puts test.join.inspect
+
+urlmap.length.times do |i|
+  puts crawl_page(urlmap[i])
+end
+#binding.pry
+
