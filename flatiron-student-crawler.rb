@@ -3,17 +3,20 @@
 require 'nokogiri'
 require 'open-uri'
 require 'pry'
+require 'sqlite3'
+
+
+
 main_page = Nokogiri::HTML(open('http://students.flatironschool.com/'))
 students_list = main_page.css('.home-blog ul')
 student_list_item = students_list.css('.blog-thumb a')
 links_to_crawl = student_list_item.map { |i| i.attributes["href"].value  }
 urlmap = links_to_crawl.map { |link| "http://students.flatironschool.com/" + link  }
+
+urlmap[5]="http://students.flatironschool.com/students/stephanie_oh.html"
 urlmap.delete_at(28)
 urlmap.delete_at(5)
 urlmap.delete_at(4)
-# urlmap[5] = "http://students.flatironschool.com/students/stephanie_oh.html"
-# urlmap[28]
-# urlmap[4]
 
 #Methods to make:
 #1. Student Image returns a string like 
@@ -62,25 +65,42 @@ def crawl_page(student_page)
   #RETURN VALUE, FOR TESTING PURPOSES
   [name,image,quote,cities,social_media_array, biography].inspect
 
+db = SQLite3::Database.new( "test.db" )
+# sql = <<SQL
+#     create table the_table (
+#       a varchar2(30),
+#       b varchar2(30)
+#     );
+
+#     insert into the_table values (?,?),*name,*image 
+#   SQL
+
+# db.execute_batch( sql )
+db.execute(" create table if not exists student (
+  name varchar2(30),
+  image varchar2(30),
+  quote text,
+  biography text
+  )
+;") 
+
+db.execute( "insert into student values ( ?, ?,?,? )", 
+  *name,*image,*quote, *biography )
+
+
+
 end
 #binding.pry
 
-final_text = ""
-#puts urlmap.inspect
 #For Testing purposes, run this function on Vivian and see what comes back
 # puts crawl_page(urlmap[0]).inspect
 # puts crawl_page(urlmap[2]).inspect
 # puts crawl_page(urlmap[3]).inspect
 # puts crawl_page(urlmap[5]).inspect
 
+
+
 test = urlmap.map do |site|
-  var = crawl_page(site)
-#   final_text += var
+  crawl_page(site)
 end
-
-
-urlmap.length.times do |i|
-  puts crawl_page(urlmap[i])
-end
-#binding.pry
-
+puts test.join.inspect
