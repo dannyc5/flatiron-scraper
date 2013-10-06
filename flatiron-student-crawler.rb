@@ -3,6 +3,7 @@
 require 'nokogiri'
 require 'open-uri'
 require 'pry'
+require 'sqlite3'
 main_page = Nokogiri::HTML(open('http://students.flatironschool.com/'))
 students_list = main_page.css('.home-blog ul')
 student_list_item = students_list.css('.blog-thumb a')
@@ -83,4 +84,9 @@ urlmap.length.times do |i|
   puts crawl_page(urlmap[i])
 end
 #binding.pry
+
+
+db = SQLite3::Database.new("student.db")
+db.execute "CREATE TABLE IF NOT EXISTS Students(id INTEGER PRIMARY KEY, name TEXT, picture TEXT, etc...)"
+db.execute "INSERT INTO Cars VALUES(id column1, column2, column3)"
 
