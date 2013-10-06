@@ -30,20 +30,24 @@ def crawl_page(student_page)
   image = url.css('.student_pic').first.attributes["src"].value
   quote = url.css('.textwidget h3')[0].children.text
 
+  # Try the following line, subbing out the "[-3]" for other elements of the array
+  # to get different information
+  cities =  url.css('h3')[-3].parent.parent.children[5].children.map { |city| city.text.strip  }.reject(&:empty?)
+
   #get favorite cities
   services_div_contents = url.css('.services')
-  cities = []
+  # cities = []
   
-  services_div_contents.each do |service_div|
-    headers = service_div.css('h3')
-    headers.each do |tag|
-      if tag.children.text == "Favorite Cities"
-        service_div.css('p a').each do |parsed_tag|
-          cities << parsed_tag.children.text
-        end
-      end
-    end
-  end
+  # services_div_contents.each do |service_div|
+  #   headers = service_div.css('h3')
+  #   headers.each do |tag|
+  #     if tag.children.text == "Favorite Cities"
+  #       service_div.css('p a').each do |parsed_tag|
+  #         cities << parsed_tag.children.text
+  #       end
+  #     end
+  #   end
+  # end
 
   #get social media links
   social_media_array = []
@@ -61,7 +65,7 @@ def crawl_page(student_page)
 
 
   #RETURN VALUE, FOR TESTING PURPOSES
-  [name,image,quote]
+  [name,image,quote,cities,social_media_array].inspect
 
 end
 #binding.pry
