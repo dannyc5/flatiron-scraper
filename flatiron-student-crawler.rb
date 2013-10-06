@@ -5,8 +5,6 @@ require 'open-uri'
 require 'pry'
 require 'sqlite3'
 
-
-
 main_page = Nokogiri::HTML(open('http://students.flatironschool.com/'))
 students_list = main_page.css('.home-blog ul')
 student_list_item = students_list.css('.blog-thumb a')
