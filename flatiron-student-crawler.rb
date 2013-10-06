@@ -35,6 +35,9 @@ def crawl_page(student_page)
   cities =  url.css('h3')[-3].parent.parent.children[5].children.map { |city| city.text.strip  }.reject(&:empty?)
   # get biographies
   biography = url.css('h3')[1].parent.parent.children[5].text.strip
+  personal_projects = url.css('h3')[-4].parent.parent.children[5].text.strip
+  favorite_websites = url.css('h3')[8].parent.parent.children[5].children.map { |site| site.text.gsub("-","").strip  }.reject(&:empty?)
+  favorite_websites = Hash[*favorite_websites.flatten]
 
   #get favorite cities
   services_div_contents = url.css('.services')
@@ -54,11 +57,11 @@ def crawl_page(student_page)
   #get social media links
   social_media_array = []
  
-  student_page.css(".social-icons a").each do |link|
+  url.css(".social-icons a").each do |link|
     social_media_array << link.attributes["href"].value
   end
    
-  student_page.css(".coder-cred a").each do |instance|
+  url.css(".coder-cred a").each do |instance|
     social_media_array << instance.attributes["href"].value 
   end
    
@@ -67,7 +70,7 @@ def crawl_page(student_page)
 
 
   #RETURN VALUE, FOR TESTING PURPOSES
-  [name,image,quote,cities,social_media_array, biography].inspect
+  [name,image,quote,cities,social_media_array, biography, favorite_websites].inspect
 
 end
 #binding.pry
